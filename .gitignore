@@ -1,0 +1,7 @@
+/cmake-build-debug/*
+/.idea/vcs.xml
+/.idea/.gitignore
+/.idea/astolfo_downloader.iml
+/.idea/discord.xml
+/.idea/misc.xml
+/.idea/modules.xml
