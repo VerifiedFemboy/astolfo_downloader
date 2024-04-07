@@ -17,7 +17,25 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <pwd.h>
 
 void clearScreen() {
     system(CLEAR_COMMAND);
+}
+
+std::string getLinuxHome() {
+    const char *homeDir = getenv("HOME");
+    if (homeDir != nullptr)
+        return std::string(homeDir);
+    else {
+        return "";
+    }
+}
+
+std::string getWinHome() {
+    //TODO: HUH!? HOW CAN I MAKE THE FUCKING CROSSPLATFORM!? FUCK WINDOWS!
+}
+
+std::string getHomeDirectory() {
+    return getLinuxHome();
 }

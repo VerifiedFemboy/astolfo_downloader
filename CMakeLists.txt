@@ -6,13 +6,11 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(astolfo_downloader main.cpp
         request.h
         os_lib.h
+        json_util.h
 )
 
 find_package(unofficial-curlpp CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
-find_package(Curses REQUIRED)
 
 target_link_libraries(astolfo_downloader PRIVATE unofficial::curlpp::curlpp)
 target_link_libraries(astolfo_downloader PRIVATE nlohmann_json::nlohmann_json)
-target_link_libraries(astolfo_downloader PRIVATE ${CURSES_LIBRARIES})
-target_include_directories(astolfo_downloader PRIVATE ${CURSES_INCLUDE_DIRS})

@@ -14,9 +14,9 @@ using JSON = nlohmann::json;
 namespace rqst {
     class request {
     public:
-        //writes stream to string
-        static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp) {
-            ((std::string*)userp)->append((char*)contents, size * nmemb);
+        //writes a stream to string
+        static size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *output) {
+            output->append((char *)contents, size * nmemb);
             return size * nmemb;
         }
 
@@ -24,9 +24,9 @@ namespace rqst {
          * sends a request and gets json
          * Example: nlohmann::json read = rq::send("https://astolfo.poligon.lgbt/api/sfw");
          * or
-         * JSON read = rq::send("https://astolfo.poligon.lgbt/api/sfw");
+         * JSON read = JSON::parse(rq::send("https://astolfo.poligon.lgbt/api/" + option));
          * */
-        static JSON send(const std::string& url) {
+        static std::string send(const std::string& url) {
             std::string readBuffer;
             CURL* curl = curl_easy_init();
             if (curl) {
@@ -37,14 +37,34 @@ namespace rqst {
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
             }
-            return JSON::parse(readBuffer);
+            return readBuffer;
         }
 
-        //TODO: make better getter?
-        /*static std::string get(const std::string& target, const JSON& json) {
-            return json[target];
-        }*/
+        static void downloadFile(const std::string& url, const std::string& path, const std::string& fileName) {
+            FILE* file;
+            file = fopen((path + "/" + fileName).c_str(), "wb");
+            if(file) {
+                std::string data = send(url);
+                fwrite(data.c_str(), 1, data.size(), file);
+                fclose(file);
+            }
+        }
     };
+
+    static std::string randomStr() {
+        const std::string characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        const int length = 6;
+        std::string result;
+
+        srand(static_cast<unsigned int>(time(nullptr)));
+
+        for (int i = 0; i < length; ++i) {
+            int randomIndex = rand() % characters.length();
+            result += characters[randomIndex];
+        }
+
+        return result;
+    }
 
 } // rqst
 
