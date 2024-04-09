@@ -82,6 +82,19 @@ void download() {
     rq::downloadFile(url, path, filename);
 
     cout << "Download completed!" << endl;
+    cout << "Do you want generate again? [Y/n]" << endl;
+    cout << "Enter: ";
+    char input;
+    cin >> input;
+    switch (input) {
+        case 'Y':
+        case 'y':
+            download();
+            break;
+        default:
+            menu();
+            break;
+    }
 //    system(("xdg-open " + path + "/" + filename).c_str()); @TODO: fix this
 }
 
